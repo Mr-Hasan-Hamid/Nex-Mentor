@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { NeXMentorLogo } from '@/components/brand/NeXMentorLogo';
-import { RiBookOpenLine } from '@remixicon/react';
 
 interface Props {
   children: React.ReactNode;
@@ -61,16 +60,8 @@ export function SupabaseSplitLayout({
         {/* Subtle Vercel grid lines */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f23_1px,transparent_1px),linear-gradient(to_bottom,#1f1f23_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30" />
 
-        {/* Top-Right Documentation Button */}
-        <div className="flex justify-end z-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-zinc-800 bg-zinc-900/80 text-zinc-400 hover:text-white text-xs font-medium transition-colors"
-          >
-            <RiBookOpenLine className="w-3.5 h-3.5" />
-            <span>Documentation</span>
-          </Link>
-        </div>
+        {/* Empty spacer replacing documentation button */}
+        <div className="h-6 z-10" />
 
         {/* Centered Testimonial Quote */}
         <div className="max-w-md mx-auto my-auto z-10">

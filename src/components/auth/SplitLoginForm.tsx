@@ -66,7 +66,7 @@ export function SplitLoginForm({ roleContext }: Props) {
 
   return (
     <div className="w-full space-y-5">
-      <div>
+      <div className="text-center">
         <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
           Welcome back
         </h2>

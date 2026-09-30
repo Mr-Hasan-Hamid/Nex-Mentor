@@ -7,7 +7,7 @@ import { FeaturedAlumni, AlumniCardData } from '@/components/landing/FeaturedAlu
 import { BentoFeatures } from '@/components/landing/BentoFeatures';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { CompanyCarousel } from '@/components/landing/CompanyCarousel';
-import { VercelFooter } from '@/components/landing/VercelFooter';
+import { SupabaseStyleFooter } from '@/components/landing/SupabaseStyleFooter';
 import BookingFlow from '@/components/booking/BookingFlow';
 import { RiCloseLine } from '@remixicon/react';
 
@@ -22,7 +22,7 @@ export default function Home() {
       <BentoFeatures />
       <HowItWorks />
       <CompanyCarousel />
-      <VercelFooter />
+      <SupabaseStyleFooter />
 
       {/* Booking Modal */}
       {selectedMentor && (
