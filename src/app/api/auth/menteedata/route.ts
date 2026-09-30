@@ -3,6 +3,8 @@ import { dbConnect } from "@/lib/mongodb";
 import Mentee from "@/models/Mentee";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     // Connect to MongoDB

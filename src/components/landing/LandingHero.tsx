@@ -8,9 +8,9 @@ import { RiSparklingLine, RiArrowRightLine, RiShieldCheckLine } from '@remixicon
 export function LandingHero() {
   return (
     <section className="relative pt-24 pb-20 overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
-      {/* Side Blur Overlays: 2 SIDES ONLY (Left & Right) */}
-      <div className="absolute inset-y-0 left-0 w-16 sm:w-36 bg-gradient-to-r from-white dark:from-black via-white/80 dark:via-black/80 to-transparent backdrop-blur-[2px] pointer-events-none z-10" />
-      <div className="absolute inset-y-0 right-0 w-16 sm:w-36 bg-gradient-to-l from-white dark:from-black via-white/80 dark:via-black/80 to-transparent backdrop-blur-[2px] pointer-events-none z-10" />
+      {/* Side Blur Overlays: Desktop only (lg+) so mobile text is never obscured */}
+      <div className="hidden lg:block absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white dark:from-black via-white/70 dark:via-black/70 to-transparent backdrop-blur-[2px] pointer-events-none z-10" />
+      <div className="hidden lg:block absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white dark:from-black via-white/70 dark:via-black/70 to-transparent backdrop-blur-[2px] pointer-events-none z-10" />
 
       {/* Vercel Ambient Gradient Glow & Subtle Grid Background with Horizontal Fade */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
@@ -20,7 +20,7 @@ export function LandingHero() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] opacity-40 dark:opacity-30" />
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 text-center">
 
         {/* Hero Headline */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[-0.035em] text-zinc-950 dark:text-white leading-[1.06] mb-6 max-w-4xl mx-auto">

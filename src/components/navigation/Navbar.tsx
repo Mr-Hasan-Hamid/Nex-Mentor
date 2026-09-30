@@ -12,6 +12,7 @@ import {
   RiDashboardLine,
   RiLogoutBoxRLine,
 } from '@remixicon/react';
+import { NavMobileMenu } from './NavMobileMenu';
 
 export default function Navbar() {
   const router = useRouter();
@@ -116,22 +117,13 @@ export default function Navbar() {
         </div>
       </div>
 
-      {mobileMenuOpen && (
-        <div className="sm:hidden border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 space-y-3 text-xs">
-          <Link href="/#featured-alumni" onClick={() => setMobileMenuOpen(false)} className="block py-1">
-            Featured Alumni
-          </Link>
-          <Link href="/#how-it-works" onClick={() => setMobileMenuOpen(false)} className="block py-1">
-            How it Works
-          </Link>
-          <Link href="/student/login" onClick={() => setMobileMenuOpen(false)} className="block py-1">
-            Student Portal
-          </Link>
-          <Link href="/alumni/login" onClick={() => setMobileMenuOpen(false)} className="block py-1">
-            Alumni Portal
-          </Link>
-        </div>
-      )}
+      <NavMobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        user={user}
+        dashboardHref={dashboardHref}
+        onSignOut={handleSignOut}
+      />
     </header>
   );
 }

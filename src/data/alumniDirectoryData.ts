@@ -1,6 +1,7 @@
 import { AlumniCardData } from '@/components/landing/AlumniMentorCard';
+import { EXTENDED_ALUMNI } from './extendedAlumniData';
 
-export const ALL_ALUMNI: AlumniCardData[] = [
+const BASE_ALUMNI: AlumniCardData[] = [
   {
     id: 'm-1',
     name: 'Rahul Sharma',
@@ -146,3 +147,5 @@ export const ALL_ALUMNI: AlumniCardData[] = [
     bio: 'Guiding students on enterprise security, penetration testing, and core CS fundamentals.',
   },
 ];
+
+export const ALL_ALUMNI: AlumniCardData[] = [...BASE_ALUMNI, ...EXTENDED_ALUMNI];

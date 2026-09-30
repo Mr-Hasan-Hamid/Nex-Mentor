@@ -10,7 +10,7 @@ import { ALL_ALUMNI } from '@/data/alumniDirectoryData';
 import { RiSearchLine, RiUserSearchLine } from '@remixicon/react';
 
 const DOMAINS = ['All Domains', 'System Design', 'DSA', 'Cloud', 'Web Dev', 'Java', 'Machine Learning'];
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 24;
 
 export default function FindMentorPage() {
   const [search, setSearch] = useState('');
@@ -50,7 +50,7 @@ export default function FindMentorPage() {
     <div className="min-h-screen bg-white dark:bg-black text-zinc-900 dark:text-zinc-100 transition-colors">
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-24 pb-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <p className="text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest mb-1.5">
             // ALUMNI DIRECTORY
@@ -94,9 +94,9 @@ export default function FindMentorPage() {
           </div>
         </div>
 
-        {/* 3x3 Grid of Paginated Alumni */}
+        {/* 4x6 (24 Cards) Grid of Paginated Alumni */}
         {paginated.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {paginated.map((mentor) => (
               <AlumniMentorCard
                 key={mentor.id}
