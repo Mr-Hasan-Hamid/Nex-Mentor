@@ -26,48 +26,46 @@ export function NeXMentorLogo({
   };
 
   return (
-    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* Sleek Vercel-Grade Geometric Monogram */}
-      <div className={`${iconDimensions[size]} relative rounded-lg bg-zinc-950 dark:bg-white flex items-center justify-center shadow-sm overflow-hidden p-1 transition-all group-hover:scale-105`}>
+    <div className={`inline-flex items-center gap-2 select-none ${className}`}>
+      {/* Symmetrical NXM Monogram */}
+      <div className={`${iconDimensions[size]} rounded-lg bg-zinc-950 dark:bg-white flex items-center justify-center shadow-sm p-1 shrink-0`}>
         <svg
-          viewBox="0 0 24 24"
+          viewBox="0 0 32 32"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full text-white dark:text-zinc-950"
         >
-          {/* Geometric N-X Vector Glyph */}
+          {/* N */}
           <path
-            d="M4 19V5L13 19V5"
+            d="M5 23V9L11 23V9"
             stroke="currentColor"
             strokeWidth="2.2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
+          {/* X */}
           <path
-            d="M20 5L12 17"
+            d="M13 9L19 23M19 9L13 23"
             stroke="currentColor"
             strokeWidth="2.2"
             strokeLinecap="round"
+            strokeLinejoin="round"
           />
+          {/* M */}
           <path
-            d="M15 12L20 19"
+            d="M21 23V9L24 16L27 9V23"
             stroke="currentColor"
             strokeWidth="2.2"
             strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
 
       {showWordmark && (
-        <div className="flex items-baseline tracking-tight">
-          <span className={`font-black text-zinc-950 dark:text-white ${textStyles[size]}`}>
-            Nex
-          </span>
-          <span className={`font-medium text-zinc-500 dark:text-zinc-400 ${textStyles[size]}`}>
-            Mentor
-          </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-zinc-950 dark:bg-white ml-0.5" />
-        </div>
+        <span className={`font-extrabold tracking-tight text-zinc-950 dark:text-white ${textStyles[size]}`}>
+          NeX<span className="font-medium text-zinc-500 dark:text-zinc-400">Mentor</span>
+        </span>
       )}
     </div>
   );

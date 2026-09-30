@@ -8,22 +8,19 @@ import { RiSparklingLine, RiArrowRightLine, RiShieldCheckLine } from '@remixicon
 export function LandingHero() {
   return (
     <section className="relative pt-24 pb-20 overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
-      {/* Vercel Ambient Gradient Glow & Subtle Grid Background */}
+      {/* Side Blur Overlays: 2 SIDES ONLY (Left & Right) */}
+      <div className="absolute inset-y-0 left-0 w-16 sm:w-36 bg-gradient-to-r from-white dark:from-black via-white/80 dark:via-black/80 to-transparent backdrop-blur-[2px] pointer-events-none z-10" />
+      <div className="absolute inset-y-0 right-0 w-16 sm:w-36 bg-gradient-to-l from-white dark:from-black via-white/80 dark:via-black/80 to-transparent backdrop-blur-[2px] pointer-events-none z-10" />
+
+      {/* Vercel Ambient Gradient Glow & Subtle Grid Background with Horizontal Fade */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         {/* Soft radial glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[360px] bg-gradient-to-b from-zinc-300/30 dark:from-zinc-800/40 to-transparent blur-[90px] rounded-full" />
-        {/* Crisp subtle developer grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_15%,#000_65%,transparent_100%)] opacity-40 dark:opacity-30" />
+        {/* Subtle developer grid masked on 2 sides */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] opacity-40 dark:opacity-30" />
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        {/* Top Product Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 text-xs font-mono text-zinc-700 dark:text-zinc-300 mb-8 backdrop-blur-md shadow-sm">
-          <RiSparklingLine className="w-3.5 h-3.5 text-zinc-950 dark:text-white" />
-          <span className="font-semibold text-zinc-950 dark:text-white">NexMentor 1.0</span>
-          <span className="text-zinc-400">•</span>
-          <span>Campus Mock Interviews & Mentorship</span>
-        </div>
 
         {/* Hero Headline */}
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[-0.035em] text-zinc-950 dark:text-white leading-[1.06] mb-6 max-w-4xl mx-auto">

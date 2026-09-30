@@ -1,0 +1,201 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { TubeRoleSwitch } from './TubeRoleSwitch';
+import { SignupRoleFields } from './SignupRoleFields';
+import { RiLoader4Line, RiAlertLine, RiCheckLine } from '@remixicon/react';
+
+interface Props {
+  initialRole?: 'student' | 'alumni';
+}
+
+export function SplitSignupForm({ initialRole = 'student' }: Props) {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [role, setRole] = useState<'student' | 'alumni'>(initialRole);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [department, setDepartment] = useState('CSE');
+  const [gradYear, setGradYear] = useState('2026');
+  const [company, setCompany] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [calUsername, setCalUsername] = useState('');
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const isStudent = role === 'student';
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    try {
+      const metadata: Record<string, any> = { role, full_name: fullName.trim() };
+      if (isStudent) {
+        metadata.department = department.trim();
+        metadata.grad_year = parseInt(gradYear) || 2026;
+      } else {
+        metadata.company = company.trim();
+        metadata.job_title = jobTitle.trim();
+        metadata.cal_username = calUsername.trim() || undefined;
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          data: metadata,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setErrorMsg(error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (data?.session) {
+        router.push(isStudent ? '/student/dashboard' : '/alumni/dashboard');
+        router.refresh();
+      } else {
+        setSuccessMsg('Account created! Please check your email to verify your account.');
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Signup failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="w-full space-y-5">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
+          Create an account
+        </h2>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          {isStudent
+            ? 'Find an alumni mentor who can help you ace placement.'
+            : 'Share your 30-min industry experience with students.'}
+        </p>
+      </div>
+
+      {/* Symmetrical Tube Role Switcher */}
+      <TubeRoleSwitch
+        activeRole={role}
+        onRoleChange={setRole}
+        navigateOnChange={false}
+      />
+
+      {errorMsg && (
+        <div className="flex items-start gap-2 p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-md text-xs text-rose-500">
+          <RiAlertLine className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
+      {successMsg && (
+        <div className="flex items-start gap-2 p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-xs text-emerald-500">
+          <RiCheckLine className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleSignup} className="space-y-3.5">
+        <div>
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+            Full Name
+          </label>
+          <input
+            type="text"
+            required
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder={isStudent ? 'Aman Kumar' : 'Rahul Sharma'}
+            className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+            {isStudent ? 'College Email' : 'Professional Email'}
+          </label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={isStudent ? 'student@campus.edu' : 'rahul@google.com'}
+            className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+            Password
+          </label>
+          <input
+            type="password"
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
+          />
+        </div>
+
+        <SignupRoleFields
+          role={role}
+          department={department}
+          gradYear={gradYear}
+          company={company}
+          jobTitle={jobTitle}
+          calUsername={calUsername}
+          setDepartment={setDepartment}
+          setGradYear={setGradYear}
+          setCompany={setCompany}
+          setJobTitle={setJobTitle}
+          setCalUsername={setCalUsername}
+        />
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-2.5 px-4 rounded-md bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-semibold text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-sm"
+        >
+          {loading ? (
+            <>
+              <RiLoader4Line className="w-4 h-4 animate-spin" />
+              <span>Creating account...</span>
+            </>
+          ) : (
+            <span>{isStudent ? 'Sign up as Student' : 'Join as Alumni Mentor'}</span>
+          )}
+        </button>
+      </form>
+
+      <div className="text-center pt-2">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          Already have an account?{' '}
+          <Link
+            href="/auth/login"
+            className="text-zinc-900 dark:text-white font-medium hover:underline ml-0.5"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}

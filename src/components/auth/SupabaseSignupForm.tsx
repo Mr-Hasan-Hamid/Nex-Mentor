@@ -92,19 +92,19 @@ export function SupabaseSignupForm({ role, onSwitchToLogin }: Props) {
       )}
 
       <div>
-        <label className="block text-xs font-medium text-zinc-400 mb-1">Full Name</label>
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">Full Name</label>
         <input
           type="text"
           required
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder={isStudent ? 'Aman Kumar' : 'Rahul Sharma'}
-          className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-zinc-400 mb-1">
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
           {isStudent ? 'College Email' : 'Professional Email'}
         </label>
         <input
@@ -113,12 +113,12 @@ export function SupabaseSignupForm({ role, onSwitchToLogin }: Props) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={isStudent ? 'student@campus.edu' : 'rahul@google.com'}
-          className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-zinc-400 mb-1">Password</label>
+        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">Password</label>
         <input
           type="password"
           required
@@ -126,7 +126,7 @@ export function SupabaseSignupForm({ role, onSwitchToLogin }: Props) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500"
+          className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-[#121214] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-zinc-950 dark:focus:border-zinc-200 transition-colors"
         />
       </div>
 
@@ -147,7 +147,7 @@ export function SupabaseSignupForm({ role, onSwitchToLogin }: Props) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full mt-2 py-2.5 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
+        className="w-full mt-2 py-2.5 px-4 rounded-md bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-semibold text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-sm"
       >
         {loading ? (
           <>
@@ -168,7 +168,7 @@ export function SupabaseSignupForm({ role, onSwitchToLogin }: Props) {
           <button
             type="button"
             onClick={onSwitchToLogin}
-            className="text-emerald-500 hover:text-emerald-400 font-medium hover:underline ml-1"
+            className="text-zinc-950 dark:text-white font-medium hover:underline ml-1"
           >
             Sign in
           </button>
