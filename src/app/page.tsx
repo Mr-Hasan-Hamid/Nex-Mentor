@@ -42,6 +42,8 @@ export default function Home() {
                 company: selectedMentor.company,
                 jobTitle: selectedMentor.jobTitle,
                 domain: selectedMentor.domain,
+                expertise: selectedMentor.expertise,
+                calUsername: (selectedMentor as any).calUsername,
               }}
               onClose={() => setSelectedMentor(null)}
               onSuccess={() => {

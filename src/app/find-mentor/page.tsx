@@ -1,29 +1,50 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Navbar from '@/components/navigation/Navbar';
 import { SupabaseStyleFooter } from '@/components/landing/SupabaseStyleFooter';
 import { AlumniMentorCard, AlumniCardData } from '@/components/landing/AlumniMentorCard';
 import BookingFlow from '@/components/booking/BookingFlow';
+import { DirectoryPagination } from '@/components/directory/DirectoryPagination';
 import { ALL_ALUMNI } from '@/data/alumniDirectoryData';
-import { RiSearchLine } from '@remixicon/react';
+import { RiSearchLine, RiUserSearchLine } from '@remixicon/react';
 
-const DOMAINS = ['All Domains', 'System Design', 'DSA', 'Cloud', 'Web Dev', 'Java'];
+const DOMAINS = ['All Domains', 'System Design', 'DSA', 'Cloud', 'Web Dev', 'Java', 'Machine Learning'];
+const PAGE_SIZE = 6;
 
 export default function FindMentorPage() {
   const [search, setSearch] = useState('');
   const [activeDomain, setActiveDomain] = useState('All Domains');
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedMentor, setSelectedMentor] = useState<AlumniCardData | null>(null);
 
-  const filtered = ALL_ALUMNI.filter((m) => {
-    const matchSearch =
-      m.name.toLowerCase().includes(search.toLowerCase()) ||
-      m.company.toLowerCase().includes(search.toLowerCase()) ||
-      m.jobTitle.toLowerCase().includes(search.toLowerCase());
-    const matchDomain =
-      activeDomain === 'All Domains' || m.expertise.some((e) => e.toLowerCase().includes(activeDomain.toLowerCase()));
-    return matchSearch && matchDomain;
-  });
+  const filtered = useMemo(() => {
+    return ALL_ALUMNI.filter((m) => {
+      const matchSearch =
+        m.name.toLowerCase().includes(search.toLowerCase()) ||
+        m.company.toLowerCase().includes(search.toLowerCase()) ||
+        m.jobTitle.toLowerCase().includes(search.toLowerCase());
+      const matchDomain =
+        activeDomain === 'All Domains' ||
+        m.expertise.some((e) => e.toLowerCase().includes(activeDomain.toLowerCase())) ||
+        m.domain.toLowerCase().includes(activeDomain.toLowerCase());
+      return matchSearch && matchDomain;
+    });
+  }, [search, activeDomain]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const paginated = filtered.slice(startIndex, startIndex + PAGE_SIZE);
+
+  const handleDomainSelect = (dom: string) => {
+    setActiveDomain(dom);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearch(val);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-zinc-900 dark:text-zinc-100 transition-colors">
@@ -50,7 +71,7 @@ export default function FindMentorPage() {
               type="text"
               placeholder="Search by name, company, or role..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
             />
           </div>
@@ -60,7 +81,7 @@ export default function FindMentorPage() {
               <button
                 key={dom}
                 type="button"
-                onClick={() => setActiveDomain(dom)}
+                onClick={() => handleDomainSelect(dom)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all ${
                   activeDomain === dom
                     ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-bold'
@@ -73,16 +94,43 @@ export default function FindMentorPage() {
           </div>
         </div>
 
-        {/* 3x3 Grid of Alumni */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((mentor) => (
-            <AlumniMentorCard
-              key={mentor.id}
-              mentor={mentor}
-              onSelectMentor={setSelectedMentor}
-            />
-          ))}
-        </div>
+        {/* 3x3 Grid of Paginated Alumni */}
+        {paginated.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginated.map((mentor) => (
+              <AlumniMentorCard
+                key={mentor.id}
+                mentor={mentor}
+                onSelectMentor={setSelectedMentor}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl p-8">
+            <RiUserSearchLine className="w-10 h-10 text-zinc-400 mx-auto mb-2" />
+            <p className="text-sm font-bold text-zinc-900 dark:text-white">No mentors found</p>
+            <p className="text-xs text-zinc-500 mt-1">Try clearing your search query or selecting &quot;All Domains&quot;.</p>
+            <button
+              onClick={() => { setSearch(''); setActiveDomain('All Domains'); }}
+              className="mt-4 px-4 py-2 rounded-lg bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 text-xs font-semibold"
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
+
+        {/* Interactive Pagination with Counter */}
+        <DirectoryPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filtered.length}
+          startIndex={startIndex}
+          endIndex={startIndex + paginated.length}
+          onPageChange={(p) => {
+            setCurrentPage(p);
+            window.scrollTo({ top: 180, behavior: 'smooth' });
+          }}
+        />
       </main>
 
       <SupabaseStyleFooter />
@@ -106,6 +154,8 @@ export default function FindMentorPage() {
                 company: selectedMentor.company,
                 jobTitle: selectedMentor.jobTitle,
                 domain: selectedMentor.domain,
+                expertise: selectedMentor.expertise,
+                calUsername: (selectedMentor as any).calUsername,
               }}
               onClose={() => setSelectedMentor(null)}
               onSuccess={() => setTimeout(() => setSelectedMentor(null), 2000)}

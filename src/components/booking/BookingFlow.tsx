@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { BookingModalHeader } from './BookingModalHeader';
 import { BookingSlotStep } from './BookingSlotStep';
@@ -14,6 +14,7 @@ export interface MentorInfo {
   company: string;
   jobTitle: string;
   domain: string;
+  expertise?: string[];
   calUsername?: string | null;
 }
 
@@ -23,7 +24,7 @@ interface Props {
   onSuccess?: (bookingId: string) => void;
 }
 
-const AVAILABLE_FOCUS = [
+const DEFAULT_FOCUS = [
   'Dynamic Programming & Recursion',
   'System Design (HLD & Scalability)',
   'Low-Level Design & OOD',
@@ -48,6 +49,12 @@ export default function BookingFlow({ mentor, onClose, onSuccess }: Props) {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState<any>(null);
+
+  // Dynamically merge mentor's database skills with standard placement topics
+  const dynamicFocus = useMemo(() => {
+    const mentorSkills = mentor.expertise || [];
+    return Array.from(new Set([...mentorSkills, ...DEFAULT_FOCUS])).slice(0, 8);
+  }, [mentor.expertise]);
 
   const toggleFocus = (area: string) => {
     if (selectedFocus.includes(area)) {
@@ -81,7 +88,6 @@ export default function BookingFlow({ mentor, onClose, onSuccess }: Props) {
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      // Parse slot time e.g. "10:00 AM" or "02:00 PM"
       const [time, modifier] = selectedSlot.split(' ');
       let [hours, minutes] = time.split(':').map(Number);
       if (modifier === 'PM' && hours < 12) hours += 12;
@@ -125,6 +131,7 @@ export default function BookingFlow({ mentor, onClose, onSuccess }: Props) {
       <div className="p-6 sm:p-8">
         {step === 1 && (
           <BookingSlotStep
+            calUsername={mentor.calUsername}
             selectedDate={selectedDate}
             selectedSlot={selectedSlot}
             onDateChange={setSelectedDate}
@@ -147,7 +154,7 @@ export default function BookingFlow({ mentor, onClose, onSuccess }: Props) {
         )}
         {step === 3 && (
           <BookingFocusStep
-            availableFocus={AVAILABLE_FOCUS}
+            availableFocus={dynamicFocus}
             selectedFocus={selectedFocus}
             notes={notes}
             loading={loading}
