@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { BookingModalHeader } from './BookingModalHeader';
 import { BookingSlotStep } from './BookingSlotStep';
 import { BookingResumeStep } from './BookingResumeStep';
 import { BookingFocusStep } from './BookingFocusStep';
@@ -18,6 +19,7 @@ export interface MentorInfo {
 
 interface Props {
   mentor: MentorInfo;
+  onClose: () => void;
   onSuccess?: (bookingId: string) => void;
 }
 
@@ -32,19 +34,17 @@ const AVAILABLE_FOCUS = [
   'Concurrency & Multithreading',
 ];
 
-export default function BookingFlow({ mentor, onSuccess }: Props) {
+export default function BookingFlow({ mentor, onClose, onSuccess }: Props) {
   const supabase = createClient();
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
-  const [selectedDate, setSelectedDate] = useState('2026-10-02');
-  const [selectedSlot, setSelectedSlot] = useState('16:30');
+  // Critical requirement: NO date and NO slot pre-selected!
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState('');
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [resumeUrl, setResumeUrl] = useState('');
   const [uploadingResume, setUploadingResume] = useState(false);
-  const [selectedFocus, setSelectedFocus] = useState<string[]>([
-    'System Design (HLD & Scalability)',
-    'Data Structures & Algorithms',
-  ]);
+  const [selectedFocus, setSelectedFocus] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState<any>(null);
@@ -57,10 +57,7 @@ export default function BookingFlow({ mentor, onSuccess }: Props) {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || file.type !== 'application/pdf') return;
-
+  const handleFileUpload = async (file: File) => {
     setResumeFile(file);
     setUploadingResume(true);
     try {
@@ -84,7 +81,12 @@ export default function BookingFlow({ mentor, onSuccess }: Props) {
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      const [hours, minutes] = selectedSlot.split(':').map(Number);
+      // Parse slot time e.g. "10:00 AM" or "02:00 PM"
+      const [time, modifier] = selectedSlot.split(' ');
+      let [hours, minutes] = time.split(':').map(Number);
+      if (modifier === 'PM' && hours < 12) hours += 12;
+      if (modifier === 'AM' && hours === 12) hours = 0;
+
       const start = new Date(selectedDate);
       start.setHours(hours, minutes, 0, 0);
       const end = new Date(start);
@@ -117,19 +119,10 @@ export default function BookingFlow({ mentor, onSuccess }: Props) {
   };
 
   return (
-    <div className="w-full bg-white dark:bg-[#181818] border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-2xl">
-      <div className="p-5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex items-center justify-between">
-        <div>
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-500">
-            30-Min Mock Interview
-          </span>
-          <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{mentor.name}</h2>
-          <p className="text-xs text-zinc-500">{mentor.jobTitle} • {mentor.company}</p>
-        </div>
-        <span className="text-[11px] font-mono text-zinc-400">Step {step}/4</span>
-      </div>
+    <div className="w-full bg-white dark:bg-[#0c0c0e] border border-zinc-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-2xl transition-all">
+      <BookingModalHeader mentor={mentor} currentStep={step} onClose={onClose} />
 
-      <div className="p-6">
+      <div className="p-6 sm:p-8">
         {step === 1 && (
           <BookingSlotStep
             selectedDate={selectedDate}
@@ -144,6 +137,10 @@ export default function BookingFlow({ mentor, onSuccess }: Props) {
             resumeFile={resumeFile}
             uploading={uploadingResume}
             onFileUpload={handleFileUpload}
+            onRemoveFile={() => {
+              setResumeFile(null);
+              setResumeUrl('');
+            }}
             onBack={() => setStep(1)}
             onContinue={() => setStep(3)}
           />

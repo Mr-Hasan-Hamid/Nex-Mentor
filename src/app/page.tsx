@@ -9,7 +9,6 @@ import { HowItWorks } from '@/components/landing/HowItWorks';
 import { CompanyCarousel } from '@/components/landing/CompanyCarousel';
 import { SupabaseStyleFooter } from '@/components/landing/SupabaseStyleFooter';
 import BookingFlow from '@/components/booking/BookingFlow';
-import { RiCloseLine } from '@remixicon/react';
 
 export default function Home() {
   const [selectedMentor, setSelectedMentor] = useState<AlumniCardData | null>(null);
@@ -24,16 +23,18 @@ export default function Home() {
       <CompanyCarousel />
       <SupabaseStyleFooter />
 
-      {/* Booking Modal */}
+      {/* Spacious 30-Min Booking Modal */}
       {selectedMentor && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="relative w-full max-w-xl my-6">
-            <button
-              onClick={() => setSelectedMentor(null)}
-              className="absolute -top-3 -right-3 w-7 h-7 rounded-full bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 shadow-md flex items-center justify-center z-10 hover:text-zinc-950 dark:hover:text-white"
-            >
-              <RiCloseLine className="w-4 h-4" />
-            </button>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+          onClick={() => setSelectedMentor(null)}
+        >
+          <div
+            className="relative w-full max-w-2xl sm:max-w-3xl my-8 transition-all"
+            onClick={(e) => e.stopPropagation()}
+          >
             <BookingFlow
               mentor={{
                 id: selectedMentor.id,
@@ -42,8 +43,9 @@ export default function Home() {
                 jobTitle: selectedMentor.jobTitle,
                 domain: selectedMentor.domain,
               }}
+              onClose={() => setSelectedMentor(null)}
               onSuccess={() => {
-                setTimeout(() => setSelectedMentor(null), 1500);
+                setTimeout(() => setSelectedMentor(null), 2000);
               }}
             />
           </div>
