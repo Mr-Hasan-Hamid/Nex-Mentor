@@ -25,7 +25,6 @@ export function SplitSignupForm({ initialRole = 'student' }: Props) {
   const [company, setCompany] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [calUsername, setCalUsername] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -60,7 +59,6 @@ export function SplitSignupForm({ initialRole = 'student' }: Props) {
 
       if (error) {
         setErrorMsg(error.message);
-        setLoading(false);
         return;
       }
 
@@ -113,9 +111,7 @@ export function SplitSignupForm({ initialRole = 'student' }: Props) {
 
       <form onSubmit={handleSignup} className="space-y-3.5">
         <div>
-          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Full Name
-          </label>
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">Full Name</label>
           <input
             type="text"
             required
@@ -141,9 +137,7 @@ export function SplitSignupForm({ initialRole = 'student' }: Props) {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Password
-          </label>
+          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">Password</label>
           <input
             type="password"
             required
@@ -175,10 +169,7 @@ export function SplitSignupForm({ initialRole = 'student' }: Props) {
           className="w-full py-2.5 px-4 rounded-md bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-semibold text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 shadow-sm"
         >
           {loading ? (
-            <>
-              <RiLoader4Line className="w-4 h-4 animate-spin" />
-              <span>Creating account...</span>
-            </>
+            <span className="flex items-center gap-1.5"><RiLoader4Line className="w-4 h-4 animate-spin" />Creating account...</span>
           ) : (
             <span>{isStudent ? 'Sign up as Student' : 'Join as Alumni Mentor'}</span>
           )}
@@ -188,10 +179,7 @@ export function SplitSignupForm({ initialRole = 'student' }: Props) {
       <div className="text-center pt-2">
         <p className="text-xs text-zinc-500 dark:text-zinc-400">
           Already have an account?{' '}
-          <Link
-            href="/auth/login"
-            className="text-zinc-900 dark:text-white font-medium hover:underline ml-0.5"
-          >
+          <Link href="/auth/login" className="text-zinc-900 dark:text-white font-medium hover:underline ml-0.5">
             Sign in
           </Link>
         </p>
