@@ -115,11 +115,33 @@ export function FeaturedAlumni({ onSelectMentor }: Props) {
             ))}
           </div>
 
-          {/* Frosted Blur Overlay covering the bottom of the 2nd row with "See More" Button */}
-          <div className="absolute -bottom-4 inset-x-0 h-52 bg-gradient-to-t from-white via-white/80 dark:from-black dark:via-black/90 to-transparent backdrop-blur-[2px] flex flex-col items-center justify-end pb-8 pointer-events-auto">
+          {/* Crescent Curved Blur Overlay: Both ends curve upwards */}
+          <div className="absolute -bottom-6 inset-x-0 h-64 overflow-hidden pointer-events-none">
+            {/* Crescent backdrop blur masked container */}
+            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/85 to-transparent dark:from-black dark:via-black/90 dark:to-transparent backdrop-blur-[4px] [mask-image:radial-gradient(110%_90%_at_50%_-15%,transparent_48%,black_65%)]" />
+
+            {/* Subtle crescent contour line with both ends up */}
+            <svg
+              className="absolute top-0 inset-x-0 w-full h-24 text-zinc-300/80 dark:text-zinc-700/80"
+              viewBox="0 0 1000 80"
+              preserveAspectRatio="none"
+              fill="none"
+            >
+              <path
+                d="M 0 5 Q 500 75 1000 5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                className="opacity-50"
+              />
+            </svg>
+          </div>
+
+          {/* Elevated CTA Button anchored over the crescent curve */}
+          <div className="absolute -bottom-2 inset-x-0 flex justify-center z-10 pointer-events-auto">
             <Link
               href="/find-mentor"
-              className="px-7 py-3 rounded-full bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 text-xs font-semibold transition-all shadow-xl hover:shadow-2xl flex items-center gap-2 group hover:scale-[1.02]"
+              className="px-8 py-3.5 rounded-full bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 text-xs font-bold transition-all shadow-2xl hover:shadow-3xl flex items-center gap-2 group hover:scale-[1.02] border border-zinc-200/20 dark:border-zinc-800"
             >
               <span>Explore All 380+ Alumni Mentors</span>
               <RiArrowRightLine className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
